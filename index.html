@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Serbian Transliterator</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                background-color: #f4f4f4;
+                padding: 20px;
+            }
+            h1 {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+            textarea {
+                width: 100%;
+                height: 200px;
+                margin-bottom: 10px;
+                font-family: inherit;
+                font-size: 16px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                resize: vertical;
+            }
+            button {
+                background-color: #3498db;
+                color: #fff;
+                font-size: 16px;
+                cursor: pointer;
+                padding: 10px 20px;
+                border: 0;
+                border-radius: 5px;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+            button:hover {
+                background-color: #2980b9;
+            }
+            .button-container {
+                text-align: center;
+            }
+            label {
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+            p {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Serbian Transliterator</h1>
+        <div class="container">
+            <label for="input">Input:</label>
+            <p>Type text in Serbian, using regular English letters.<br />
+                Special characters: <strong>c=</strong> will convert to <strong>č</strong>, <strong>c==</strong> - to <strong>ć</strong>.<br/>
+                And <strong>d=</strong>, <strong>s=</strong> and <strong>z=</strong> will convert into <strong>đ</strong>, <strong>š</strong> and <strong>ž</strong>.</p>
+            <textarea id="input" oninput="transliterate()"></textarea>
+            <label for="serbianLatin">Serbian Latin:</label>
+            <textarea id="serbianLatin" readonly></textarea>
+            <div class="button-container">
+                <button onclick="copyText('serbianLatin')">Copy</button>
+            </div>
+            <label for="serbianCyrillic">Serbian Cyrillic:</label>
+            <textarea id="serbianCyrillic" readonly></textarea>
+            <div class="button-container">
+                <button onclick="copyText('serbianCyrillic')">Copy</button>
+            </div>
+        </div>
+
+    <script>
+        const latinToCyrillicJson = {"A":"А", "B":"Б", "V":"В", "G":"Г", "D":"Д", "Đ":"Ђ", "E":"Е", "Ž":"Ж", "Z":"З", "I":"И", "J":"Ј", "K":"К", "L":"Л", "M":"М", "N":"Н", "O":"О", "P":"П", "R":"Р", "S":"С", "T":"Т", "Ć":"Ћ", "U":"У", "F":"Ф", "H":"Х", "C":"Ц", "Č":"Ч", "Š":"Ш", "a":"а", "b":"б", "v":"в", "g":"г", "d":"д", "đ":"ђ", "e":"е", "ž":"ж", "z":"з", "i":"и", "j":"ј", "k":"к", "l":"л", "m":"м", "n":"н", "o":"о", "p":"п", "r":"р", "s":"с", "t":"т", "ć":"ћ", "u":"у", "f":"ф", "h":"х", "c":"ц", "č":"ч", "š":"ш"};
+
+        function transliterate() {
+            let inputText = document.getElementById('input').value;
+            let serbianLatin = inputText.replace(/c==/g, 'ć').replace(/c=/g, 'č').replace(/C==/g, 'Ć').replace(/C=/g, 'Č').replace(/d=/g, 'đ').replace(/D=/g, 'Đ').replace(/s=/g, 'š').replace(/S=/g, 'Š').replace(/z=/g, 'ž').replace(/Z=/g, 'Ž');
+            document.getElementById('serbianLatin').value = serbianLatin;
+            let serbianCyrillic = Array.from(serbianLatin).map(char => latinToCyrillicJson[char] || char).join('');
+            document.getElementById('serbianCyrillic').value = serbianCyrillic;
+        }
+
+        function copyText(textAreaId) {
+            let copyText = document.getElementById(textAreaId);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+            alert("Text copied to clipboard");
+        }
+    </script>
+</body>
+</html>
