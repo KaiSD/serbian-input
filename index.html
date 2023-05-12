@@ -158,7 +158,7 @@
             document.getElementById('serbianLatin').value = serbianLatin;
 
             // Replace 'LJ', 'lj', 'NJ', 'nj' in Serbian Latin with corresponding Cyrillic letters
-            let serbianCyrillic = Array.from(serbianLatin.replace(/LJ/g, 'Љ').replace(/lj/g, 'љ').replace(/NJ/g, 'Њ').replace(/nj/g, 'њ')).map(char => latinToCyrillicJson[char] || char).join('');
+            let serbianCyrillic = Array.from(serbianLatin.replace(/LJ/g, 'Љ').replace(/lj/g, 'љ').replace(/NJ/g, 'Њ').replace(/nj/g, 'њ').replace(/DŽ/g, 'Џ').replace(/dž/g, 'џ')).map(char => latinToCyrillicJson[char] || char).join('');
 
             document.getElementById('serbianCyrillic').value = serbianCyrillic;
         }
