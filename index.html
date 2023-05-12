@@ -76,11 +76,13 @@
             <textarea id="serbianLatin" readonly></textarea>
             <div class="button-container">
                 <button onclick="copyText('serbianLatin')">Copy</button>
+                <button onclick="openInGoogleTranslate('serbianLatin')">Translate</button>
             </div>
             <label for="serbianCyrillic">Serbian Cyrillic:</label>
             <textarea id="serbianCyrillic" readonly></textarea>
             <div class="button-container">
                 <button onclick="copyText('serbianCyrillic')">Copy</button>
+                <button onclick="openInGoogleTranslate('serbianCyrillic')">Translate</button>
             </div>
         </div>
 
@@ -101,6 +103,12 @@
             copyText.setSelectionRange(0, 99999); // For mobile devices
             document.execCommand("copy");
             alert("Text copied to clipboard");
+        }
+        
+        function openInGoogleTranslate(textAreaId) {
+            let textToTranslate = document.getElementById(textAreaId).value;
+            let url = 'https://translate.google.com/?sl=sr&tl=en&text=' + encodeURIComponent(textToTranslate) + '&op=translate';
+            window.open(url, '_blank');
         }
     </script>
 </body>
