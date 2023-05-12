@@ -75,6 +75,34 @@
                 background-color: #f2f2f2;
                 color: black;
             }
+            .tabs {
+                border-bottom: 1px solid #ddd;
+                margin-bottom: 0px;
+            }
+            .tab {
+                display: none;
+                margin-top: -1px;
+            }
+            .tab-button {
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-bottom: none;
+                background-color: #e7f4fc;
+                cursor: pointer;
+                margin-right: 5px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 0px;
+                font-weight: bold;
+                color: #777;
+                text-decoration: none;
+                margin-bottom: 0px;
+            }
+            .tab-button.active {
+                background-color: #3498db;
+                color: #fff;
+            }
         </style>
     </head>
     <body>
@@ -101,10 +129,18 @@
             </table>
             <label for="input">Enter text here:</label>
             <textarea id="input" oninput="transliterate()"></textarea>
-            <label for="serbianLatin">Serbian Latin output:</label>
-            <textarea id="serbianLatin" readonly></textarea>
-            <label for="serbianCyrillic">Serbian Cyrillic output:</label>
-            <textarea id="serbianCyrillic" readonly></textarea>
+            <div class="button-container">
+                <div class="tabs">
+                    <button class="tab-button active" onclick="changeTab('latin')">Latin</button>
+                    <button class="tab-button" onclick="changeTab('cyrillic')">Cyrillic</button>
+                </div>
+                <div id="latin" class="tab" style="display: block;">
+                    <textarea id="serbianLatin" readonly></textarea>
+                </div>
+                <div id="cyrillic" class="tab">
+                    <textarea id="serbianCyrillic" readonly></textarea>
+                </div>
+            </div>
             <div class="button-container">
                 <button onclick="copyText('serbianLatin')">Copy Latin</button>
                 <button onclick="copyText('serbianCyrillic')">Copy Cyrillic</button>
@@ -115,11 +151,15 @@
     <script>
         const latinToCyrillicJson = {"A":"А", "B":"Б", "V":"В", "G":"Г", "D":"Д", "Đ":"Ђ", "E":"Е", "Ž":"Ж", "Z":"З", "I":"И", "J":"Ј", "K":"К", "L":"Л", "M":"М", "N":"Н", "O":"О", "P":"П", "R":"Р", "S":"С", "T":"Т", "Ć":"Ћ", "U":"У", "F":"Ф", "H":"Х", "C":"Ц", "Č":"Ч", "Š":"Ш", "a":"а", "b":"б", "v":"в", "g":"г", "d":"д", "đ":"ђ", "e":"е", "ž":"ж", "z":"з", "i":"и", "j":"ј", "k":"к", "l":"л", "m":"м", "n":"н", "o":"о", "p":"п", "r":"р", "s":"с", "t":"т", "ć":"ћ", "u":"у", "f":"ф", "h":"х", "c":"ц", "č":"ч", "š":"ш"};
 
+
         function transliterate() {
             let inputText = document.getElementById('input').value;
             let serbianLatin = inputText.replace(/c==/g, 'ć').replace(/c=/g, 'č').replace(/C==/g, 'Ć').replace(/C=/g, 'Č').replace(/d=/g, 'đ').replace(/D=/g, 'Đ').replace(/s=/g, 'š').replace(/S=/g, 'Š').replace(/z=/g, 'ž').replace(/Z=/g, 'Ž');
             document.getElementById('serbianLatin').value = serbianLatin;
-            let serbianCyrillic = Array.from(serbianLatin).map(char => latinToCyrillicJson[char] || char).join('');
+
+            // Replace 'LJ', 'lj', 'NJ', 'nj' in Serbian Latin with corresponding Cyrillic letters
+            let serbianCyrillic = Array.from(serbianLatin.replace(/LJ/g, 'Љ').replace(/lj/g, 'љ').replace(/NJ/g, 'Њ').replace(/nj/g, 'њ')).map(char => latinToCyrillicJson[char] || char).join('');
+
             document.getElementById('serbianCyrillic').value = serbianCyrillic;
         }
 
@@ -135,6 +175,20 @@
             let textToTranslate = document.getElementById(textAreaId).value;
             let url = 'https://translate.google.com/?sl=sr&text=' + encodeURIComponent(textToTranslate) + '&op=translate';
             window.open(url, '_blank');
+        }
+
+        function changeTab(tabName) {
+            let tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].style.display = 'none';
+            }
+            document.getElementById(tabName).style.display = 'block';
+
+            let buttons = document.getElementsByClassName('tab-button');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].classList.remove('active');
+            }
+            document.querySelector(`.tab-button[onclick="changeTab('${tabName}')"]`).classList.add('active');
         }
     </script>
 </body>
