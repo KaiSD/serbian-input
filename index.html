@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Serbian Transliterator</title>
+        <title>Serbian Input</title>
         <style>
             * {
                 box-sizing: border-box;
@@ -28,7 +28,7 @@
             }
             textarea {
                 width: 100%;
-                height: 150px;
+                height: 100px;
                 margin-bottom: 10px;
                 font-family: inherit;
                 font-size: 16px;
@@ -62,27 +62,53 @@
             p {
                 margin-bottom: 20px;
             }
+            table {
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+            }
+            th {
+                background-color: #f2f2f2;
+                color: black;
+            }
         </style>
     </head>
     <body>
-        <h1>Serbian Transliterator</h1>
+        <h1>Serbian Input</h1>
         <div class="container">
-            <label for="input">Input:</label>
-            <p>Type text in Serbian, using regular English letters.<br />
-                Special characters: <strong>c=</strong> will convert into <strong>č</strong>, <strong>c==</strong> — into <strong>ć</strong>.<br/>
-                And <strong>d=</strong>, <strong>s=</strong> and <strong>z=</strong> will convert into <strong>đ</strong>, <strong>š</strong> and <strong>ž</strong>.</p>
+            <p>Type Serbian text using regular English keyboard. To type special character, use conversion rules below:</p>
+            <table>
+                <tr>
+                    <th>Type this</th>
+                    <td>c=</td>
+                    <td>c==</td>
+                    <td>d=</td>
+                    <td>s=</td>
+                    <td>z=</td>
+                </tr>
+                <tr>
+                    <th>To get this</th>
+                    <td>č</td>
+                    <td>ć</td>
+                    <td>đ</td>
+                    <td>š</td>
+                    <td>ž</td>
+                </tr>
+            </table>
+            <label for="input">Enter text here:</label>
             <textarea id="input" oninput="transliterate()"></textarea>
-            <label for="serbianLatin">Serbian Latin:</label>
+            <label for="serbianLatin">Serbian Latin output:</label>
             <textarea id="serbianLatin" readonly></textarea>
-            <div class="button-container">
-                <button onclick="copyText('serbianLatin')">Copy</button>
-                <button onclick="openInGoogleTranslate('serbianLatin')">Translate</button>
-            </div>
-            <label for="serbianCyrillic">Serbian Cyrillic:</label>
+            <label for="serbianCyrillic">Serbian Cyrillic output:</label>
             <textarea id="serbianCyrillic" readonly></textarea>
             <div class="button-container">
-                <button onclick="copyText('serbianCyrillic')">Copy</button>
-                <button onclick="openInGoogleTranslate('serbianCyrillic')">Translate</button>
+                <button onclick="copyText('serbianLatin')">Copy Latin</button>
+                <button onclick="copyText('serbianCyrillic')">Copy Cyrillic</button>
+                <button onclick="openInGoogleTranslate('serbianCyrillic')">Send to Google Translate</button>
             </div>
         </div>
 
@@ -104,10 +130,10 @@
             document.execCommand("copy");
             alert("Text copied to clipboard");
         }
-        
+
         function openInGoogleTranslate(textAreaId) {
             let textToTranslate = document.getElementById(textAreaId).value;
-            let url = 'https://translate.google.com/?sl=sr&tl=en&text=' + encodeURIComponent(textToTranslate) + '&op=translate';
+            let url = 'https://translate.google.com/?sl=sr&text=' + encodeURIComponent(textToTranslate) + '&op=translate';
             window.open(url, '_blank');
         }
     </script>
